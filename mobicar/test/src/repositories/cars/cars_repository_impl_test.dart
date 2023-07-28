@@ -11,7 +11,7 @@ void main() {
 
   test('Test findModel', () async {
     final model = await repository.findModel('59');
-    expect(model.first.nome, "32000 Gasolina");
+    expect(model.first.nome, "AMAROK CD2.0 16V/S CD2.0 16V TDI 4x2 Die");
   });
 
   test('Test findYear', () async {
