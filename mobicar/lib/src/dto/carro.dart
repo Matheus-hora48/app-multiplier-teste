@@ -1,13 +1,14 @@
 import 'dart:ffi';
 
-import 'marcas.dart';
-import 'modelos.dart';
+import 'package:mobicar/src/models/modelos.dart';
+
+import '../models/marcas.dart';
 
 class Carro {
-  final String valor;
-  final Marcas marcas;
-  final Modelos modelos;
+  final String marcas;
+  final String modelos;
   final Int anoModelo;
+  final String valor;
   final String combustivel;
 
   Carro({

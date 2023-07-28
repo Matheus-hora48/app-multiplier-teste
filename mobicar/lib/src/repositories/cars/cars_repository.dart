@@ -1,18 +1,16 @@
-import '../../dto/anos.dart';
-import '../../dto/carro.dart';
-import '../../dto/marcas.dart';
-import '../../dto/modelos.dart';
+import '../../models/anos.dart';
+import '../../models/marcas.dart';
+import '../../models/modelos.dart';
+import '../../models/valor.dart';
 
 abstract class CarsRepository {
-  Future<List<Marcas>> findBrand(String vehicleType);
-  Future<List<Modelos>> findModel(String vehicleType, String brandId);
+  Future<List<Marcas>> findBrand();
+  Future<List<Modelos>> findModel(String brandId);
   Future<List<Anos>> findYear(
-    String vehicleType,
     String brandId,
     String modelId,
   );
-  Future<Carro> findCar(
-    String vehicleType,
+  Future<List<Valor>> findValue(
     String brandId,
     String modelId,
     String yearId,

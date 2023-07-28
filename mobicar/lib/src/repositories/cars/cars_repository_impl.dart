@@ -1,47 +1,104 @@
 import 'dart:developer';
 
-import '../../core/rest_client/custom_dio.dart';
+import '../../core/exceptions/repository_exceptions.dart';
+import '../../core/rest_client/http_manager.dart';
+import '../../models/valor.dart';
 import 'cars_repository.dart';
-import '../../dto/anos.dart';
-import '../../dto/carro.dart';
-import '../../dto/marcas.dart';
-import '../../dto/modelos.dart';
+import '../../models/anos.dart';
+import '../../models/marcas.dart';
+import '../../models/modelos.dart';
 
 class CarsRepositoryImpl implements CarsRepository {
-  final CustomDio _dio;
-
-  CarsRepositoryImpl(this._dio);
+  final HttpManager _httpManager = HttpManager();
+  final String baseUrl = 'https://parallelum.com.br/fipe/api/v1';
 
   @override
-  Future<List<Marcas>> findBrand(String vehicleType) async {
+  Future<List<Marcas>> findBrand() async {
     try {
-      await _dio.
+      final brandResponse = await _httpManager.restRequest(
+        url: "$baseUrl/carros/marcas",
+        method: HttpMethods.get,
+      );
+      print(brandResponse);
+      if (brandResponse is List) {
+        return brandResponse.map<Marcas>((o) => Marcas.fromMap(o)).toList();
+      }
+      return [];
     } catch (e, s) {
       log(
-        'Erro ao buscar ',
+        'Erro ao buscar as marcas',
         error: e,
         stackTrace: s,
+      );
+      throw RepositoryExceptions(
+        message: 'Erro ao buscar as marcas',
       );
     }
   }
 
   @override
-  Future<Carro> findCar(
-      String vehicleType, String brandId, String modelId, String yearId) {
-    // TODO: implement findCar
-    throw UnimplementedError();
+  Future<List<Modelos>> findModel(String brandId) async {
+    try {
+      final modelResponse = await _httpManager.restRequest(
+        url: "$baseUrl/carros/marcas/$brandId/modelos",
+        method: HttpMethods.get,
+      );
+      if (modelResponse is List) {
+        return modelResponse.map<Modelos>((o) => Modelos.fromMap(o)).toList();
+      }
+      return [];
+    } catch (e, s) {
+      log(
+        'Erro ao buscar os modelos',
+        error: e,
+        stackTrace: s,
+      );
+      throw RepositoryExceptions(
+        message: 'Erro ao buscar os modelos',
+      );
+    }
   }
 
   @override
-  Future<List<Modelos>> findModel(String vehicleType, String brandId) {
-    // TODO: implement findModel
-    throw UnimplementedError();
+  Future<List<Anos>> findYear(String brandId, String modelId) async {
+    try {
+      final yearResponse = await _httpManager.restRequest(
+        url: "/carros/marcas/$brandId/modelos/$modelId/anos",
+        method: HttpMethods.get,
+      );
+      return (yearResponse as List).map<Anos>((o) => Anos.fromMap(o)).toList();
+    } catch (e, s) {
+      log(
+        'Erro ao buscar as datas',
+        error: e,
+        stackTrace: s,
+      );
+      throw RepositoryExceptions(
+        message: 'Erro ao buscar as datas',
+      );
+    }
   }
 
   @override
-  Future<List<Anos>> findYear(
-      String vehicleType, String brandId, String modelId) {
-    // TODO: implement findYear
-    throw UnimplementedError();
+  Future<List<Valor>> findValue(
+      String brandId, String modelId, String yearId) async {
+    try {
+      final valueResponse = await _httpManager.restRequest(
+        url: "/carros/marcas/$brandId/modelos/$modelId/anos/$yearId",
+        method: HttpMethods.get,
+      );
+      return (valueResponse as List)
+          .map<Valor>((o) => Valor.fromMap(o))
+          .toList();
+    } catch (e, s) {
+      log(
+        'Erro ao buscar os valores',
+        error: e,
+        stackTrace: s,
+      );
+      throw RepositoryExceptions(
+        message: 'Erro ao buscar os valores',
+      );
+    }
   }
 }
