@@ -1,28 +1,26 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobicar/src/core/rest_client/http_manager.dart';
-import 'package:mobicar/src/models/marcas.dart';
 import 'package:mobicar/src/repositories/cars/cars_repository_impl.dart';
-import 'package:mockito/mockito.dart';
-
-class MockHttpManager extends Mock implements HttpManager {}
 
 void main() {
-  final mockHttpManager = MockHttpManager();
   final repository = CarsRepositoryImpl();
-
-  final response = [
-    {"codigo": "1", "nome": "Acura"}
-  ];
-
-  when(mockHttpManager.restRequest(
-    url: "/carros/marcas",
-    method: HttpMethods.get,
-  )).thenReturn(Future.value(response as dynamic));
 
   test('Test findBrand', () async {
     final brands = await repository.findBrand();
+    expect(brands.first.nome, "Acura");
+  });
 
-    expect(brands, [Marcas(codigo: '1', nome: "Acura")]);
+  test('Test findModel', () async {
+    final model = await repository.findModel('59');
+    expect(model.first.nome, "32000 Gasolina");
+  });
+
+  test('Test findYear', () async {
+    final year = await repository.findYear('59', '5940');
+    expect(year.first.nome, "2022 Diesel");
+  });
+
+  test('Test findValue', () async {
+    final value = await repository.findValue('59', '5940', '2014-3');
+    expect(value.valor, "R\$ 116.194,00");
   });
 }

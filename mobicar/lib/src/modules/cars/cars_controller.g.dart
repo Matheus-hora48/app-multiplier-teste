@@ -43,19 +43,57 @@ mixin _$CarsController on CarsControllerBase, Store {
     });
   }
 
-  late final _$_errorMessageAtom =
-      Atom(name: 'CarsControllerBase._errorMessage', context: context);
+  late final _$_modelAtom =
+      Atom(name: 'CarsControllerBase._model', context: context);
 
-  @override
-  String? get _errorMessage {
-    _$_errorMessageAtom.reportRead();
-    return super._errorMessage;
+  List<Modelos> get model {
+    _$_modelAtom.reportRead();
+    return super._model;
   }
 
   @override
-  set _errorMessage(String? value) {
-    _$_errorMessageAtom.reportWrite(value, super._errorMessage, () {
-      super._errorMessage = value;
+  List<Modelos> get _model => model;
+
+  @override
+  set _model(List<Modelos> value) {
+    _$_modelAtom.reportWrite(value, super._model, () {
+      super._model = value;
+    });
+  }
+
+  late final _$_yearAtom =
+      Atom(name: 'CarsControllerBase._year', context: context);
+
+  List<Anos> get year {
+    _$_yearAtom.reportRead();
+    return super._year;
+  }
+
+  @override
+  List<Anos> get _year => year;
+
+  @override
+  set _year(List<Anos> value) {
+    _$_yearAtom.reportWrite(value, super._year, () {
+      super._year = value;
+    });
+  }
+
+  late final _$_valueAtom =
+      Atom(name: 'CarsControllerBase._value', context: context);
+
+  Valor? get value {
+    _$_valueAtom.reportRead();
+    return super._value;
+  }
+
+  @override
+  Valor? get _value => value;
+
+  @override
+  set _value(Valor? value) {
+    _$_valueAtom.reportWrite(value, super._value, () {
+      super._value = value;
     });
   }
 
@@ -65,6 +103,35 @@ mixin _$CarsController on CarsControllerBase, Store {
   @override
   Future<void> showBrand() {
     return _$showBrandAsyncAction.run(() => super.showBrand());
+  }
+
+  late final _$showModelAsyncAction =
+      AsyncAction('CarsControllerBase.showModel', context: context);
+
+  @override
+  Future<void> showModel({required String brandId}) {
+    return _$showModelAsyncAction.run(() => super.showModel(brandId: brandId));
+  }
+
+  late final _$showYearAsyncAction =
+      AsyncAction('CarsControllerBase.showYear', context: context);
+
+  @override
+  Future<void> showYear({required String brandId, required String modelId}) {
+    return _$showYearAsyncAction
+        .run(() => super.showYear(brandId: brandId, modelId: modelId));
+  }
+
+  late final _$showValueAsyncAction =
+      AsyncAction('CarsControllerBase.showValue', context: context);
+
+  @override
+  Future<void> showValue(
+      {required dynamic brandId,
+      required String modelId,
+      required String yearId}) {
+    return _$showValueAsyncAction.run(() =>
+        super.showValue(brandId: brandId, modelId: modelId, yearId: yearId));
   }
 
   @override

@@ -35,10 +35,7 @@ abstract class CarsControllerBase with Store {
   List<Anos> _year = [];
 
   @readonly
-  List<Valor> _value = [];
-
-  @observable
-  String? _errorMessage;
+  Valor? _value;
 
   @action
   Future<void> showBrand() async {

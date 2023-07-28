@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobicar/src/modules/cars/cars_controller.dart';
 
@@ -13,7 +14,10 @@ class CarsPage extends StatefulWidget {
 
 class _CarsPageState extends State<CarsPage> {
   final controller = Modular.get<CarsController>();
-  int brandId = 0;
+  int brandId = 1;
+  int modelId = 1;
+  int yearId = 1;
+  String value = '';
 
   @override
   void initState() {
@@ -96,33 +100,208 @@ class _CarsPageState extends State<CarsPage> {
                           return AlertDialog(
                             title: Row(
                               children: [
-                                Icon(Icons.car_repair),
-                                Text('Cadastro de Veículo'),
-                                Spacer(),
-                                Icon(Icons.close)
+                                const Icon(Icons.car_repair),
+                                const Text('Cadastro de Veículo'),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(Icons.close),
+                                )
                               ],
                             ),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset('assets/images/carro.jpeg'),
-                                DropdownButton(
-                                  value: brandId,
-                                  items: controller.brand.map((marca) {
-                                    return DropdownMenuItem<int>(
-                                      value: int.parse(marca.codigo),
-                                      child: Text(marca.nome),
-                                    );
-                                  }).toList(),
-                                  onChanged: (int? newValue) {
-                                    setState(() {
-                                      brandId = newValue!;
-                                    });
-                                    controller.showModel(
-                                      brandId: brandId.toString(),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Observer(
+                                  builder: (_) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: DropdownButton(
+                                            value: brandId,
+                                            items:
+                                                controller.brand.map((marca) {
+                                              return DropdownMenuItem<int>(
+                                                value: int.parse(marca.codigo),
+                                                child: Text(marca.nome),
+                                              );
+                                            }).toList(),
+                                            onChanged: (int? newValue) async {
+                                              setState(() {
+                                                brandId = newValue!;
+                                              });
+                                              await controller.showModel(
+                                                brandId: brandId.toString(),
+                                              );
+                                              modelId = int.parse(
+                                                controller.model.first.codigo,
+                                              );
+                                            },
+                                            hint: const Text('Marca'),
+                                            underline: const SizedBox(),
+                                            isExpanded: true,
+                                            padding: const EdgeInsets.all(12),
+                                            isDense: true,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: DropdownButton(
+                                            value: modelId,
+                                            items:
+                                                controller.model.map((marca) {
+                                              return DropdownMenuItem<int>(
+                                                value: int.parse(marca.codigo),
+                                                child: Text(marca.nome),
+                                              );
+                                            }).toList(),
+                                            onChanged: (int? newValue) async {
+                                              setState(() {
+                                                modelId = newValue!;
+                                              });
+                                              await controller.showYear(
+                                                brandId: brandId.toString(),
+                                                modelId: modelId.toString(),
+                                              );
+                                              yearId = int.parse(
+                                                controller
+                                                    .year.first.anoSemHifen,
+                                              );
+                                              print(yearId);
+                                            },
+                                            hint: const Text('Modelos'),
+                                            underline: const SizedBox(),
+                                            isExpanded: true,
+                                            padding: const EdgeInsets.all(12),
+                                            isDense: true,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: DropdownButton(
+                                            value: yearId,
+                                            items: controller.year.map((marca) {
+                                              return DropdownMenuItem<int>(
+                                                value: int.parse(
+                                                  marca.anoSemHifen,
+                                                ),
+                                                child: Text(marca.nome),
+                                              );
+                                            }).toList(),
+                                            onChanged: (int? newValue) {
+                                              setState(() {
+                                                yearId = newValue!;
+                                              });
+                                              controller.showValue(
+                                                brandId: brandId.toString(),
+                                                modelId: modelId.toString(),
+                                                yearId: yearId.toString(),
+                                              );
+                                            },
+                                            hint: const Text('Valor'),
+                                            underline: const SizedBox(),
+                                            isExpanded: true,
+                                            padding: const EdgeInsets.all(12),
+                                            isDense: true,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.all(12),
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: Text(value.isEmpty
+                                              ? 'Valor (R\$)'
+                                              : value),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            OutlinedButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              style: ButtonStyle(
+                                                  side: MaterialStateBorderSide
+                                                      .resolveWith((states) =>
+                                                          BorderSide(
+                                                            color: Colors.black,
+                                                          ))),
+                                              child: Text(
+                                                'Cancelar',
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {},
+                                              style: ButtonStyle(
+                                                elevation:
+                                                    MaterialStateProperty.all(
+                                                        0),
+                                                backgroundColor:
+                                                    MaterialStateColor
+                                                        .resolveWith(
+                                                  (states) => Colors.black,
+                                                ),
+                                              ),
+                                              child: Text('Salvar'),
+                                            )
+                                          ],
+                                        )
+                                      ],
                                     );
                                   },
-                                ),
+                                )
                               ],
                             ),
                           );

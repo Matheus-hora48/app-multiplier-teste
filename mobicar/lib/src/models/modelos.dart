@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Modelos {
@@ -19,12 +18,13 @@ class Modelos {
 
   factory Modelos.fromMap(Map<String, dynamic> map) {
     return Modelos(
-      codigo: map['codigo'] as String,
+      codigo: map['codigo'].toString(),
       nome: map['nome'] as String,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Modelos.fromJson(String source) => Modelos.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Modelos.fromJson(String source) =>
+      Modelos.fromMap(json.decode(source) as Map<String, dynamic>);
 }

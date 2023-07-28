@@ -10,7 +10,7 @@ abstract class CarsRepository {
     String brandId,
     String modelId,
   );
-  Future<List<Valor>> findValue(
+  Future<Valor> findValue(
     String brandId,
     String modelId,
     String yearId,

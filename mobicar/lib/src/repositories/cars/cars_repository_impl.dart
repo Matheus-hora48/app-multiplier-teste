@@ -43,8 +43,11 @@ class CarsRepositoryImpl implements CarsRepository {
         url: "$baseUrl/carros/marcas/$brandId/modelos",
         method: HttpMethods.get,
       );
-      if (modelResponse is List) {
-        return modelResponse.map<Modelos>((o) => Modelos.fromMap(o)).toList();
+
+      if (modelResponse['modelos'] is List) {
+        return modelResponse['modelos']
+            .map<Modelos>((o) => Modelos.fromMap(o))
+            .toList();
       }
       return [];
     } catch (e, s) {
@@ -63,7 +66,7 @@ class CarsRepositoryImpl implements CarsRepository {
   Future<List<Anos>> findYear(String brandId, String modelId) async {
     try {
       final yearResponse = await _httpManager.restRequest(
-        url: "/carros/marcas/$brandId/modelos/$modelId/anos",
+        url: "$baseUrl/carros/marcas/$brandId/modelos/$modelId/anos",
         method: HttpMethods.get,
       );
       return (yearResponse as List).map<Anos>((o) => Anos.fromMap(o)).toList();
@@ -80,16 +83,14 @@ class CarsRepositoryImpl implements CarsRepository {
   }
 
   @override
-  Future<List<Valor>> findValue(
-      String brandId, String modelId, String yearId) async {
+  Future<Valor> findValue(String brandId, String modelId, String yearId) async {
     try {
       final valueResponse = await _httpManager.restRequest(
-        url: "/carros/marcas/$brandId/modelos/$modelId/anos/$yearId",
+        url: "$baseUrl/marcas/$brandId/modelos/$modelId/anos/$yearId",
         method: HttpMethods.get,
       );
-      return (valueResponse as List)
-          .map<Valor>((o) => Valor.fromMap(o))
-          .toList();
+      return Valor.fromMap(
+          valueResponse); // Supondo que Valor possui um construtor fromMap que recebe um Map<String, dynamic>.
     } catch (e, s) {
       log(
         'Erro ao buscar os valores',

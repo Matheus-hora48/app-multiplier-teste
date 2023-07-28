@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Valor {
-  final int TipoVeiculo;
+  final int tipoVeiculo;
   final String valor;
   final String marca;
   final String modelo;
@@ -12,7 +12,7 @@ class Valor {
   final String siglaCombustivel;
 
   Valor({
-    required this.TipoVeiculo,
+    required this.tipoVeiculo,
     required this.valor,
     required this.marca,
     required this.modelo,
@@ -25,7 +25,7 @@ class Valor {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'TipoVeiculo': TipoVeiculo,
+      'TipoVeiculo': tipoVeiculo,
       'valor': valor,
       'marca': marca,
       'modelo': modelo,
@@ -39,7 +39,7 @@ class Valor {
 
   factory Valor.fromMap(Map<String, dynamic> map) {
     return Valor(
-      TipoVeiculo: map['TipoVeiculo'] as int,
+      tipoVeiculo: map['TipoVeiculo'] as int,
       valor: map['valor'] as String,
       marca: map['marca'] as String,
       modelo: map['modelo'] as String,

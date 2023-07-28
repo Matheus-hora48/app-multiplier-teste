@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 class Anos {
   final String codigo;
   final String nome;
+  final String anoSemHifen;
 
   Anos({
     required this.codigo,
     required this.nome,
+    required this.anoSemHifen,
   });
 
   Map<String, dynamic> toMap() {
@@ -17,9 +17,12 @@ class Anos {
   }
 
   factory Anos.fromMap(Map<String, dynamic> map) {
+    final codigo = map['codigo'] as String;
+    final partesCodigo = codigo.split('-');
     return Anos(
       codigo: map['codigo'] as String,
       nome: map['nome'] as String,
+      anoSemHifen: partesCodigo[0],
     );
   }
 
