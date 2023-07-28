@@ -19,7 +19,6 @@ class CarsRepositoryImpl implements CarsRepository {
         url: "$baseUrl/carros/marcas",
         method: HttpMethods.get,
       );
-      print(brandResponse);
       if (brandResponse is List) {
         return brandResponse.map<Marcas>((o) => Marcas.fromMap(o)).toList();
       }
