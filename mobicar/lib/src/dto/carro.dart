@@ -1,9 +1,5 @@
 import 'dart:ffi';
 
-import 'package:mobicar/src/models/modelos.dart';
-
-import '../models/marcas.dart';
-
 class Carro {
   final String marcas;
   final String modelos;

@@ -14,6 +14,8 @@ class CarsPage extends StatefulWidget {
 class _CarsPageState extends State<CarsPage> {
   final controller = Modular.get<CarsController>();
   int brandId = 0;
+  int modelId = 0;
+  int yearId = 0;
 
   @override
   void initState() {
@@ -107,6 +109,7 @@ class _CarsPageState extends State<CarsPage> {
                               children: [
                                 Image.asset('assets/images/carro.jpeg'),
                                 DropdownButton(
+                                  hint: const Text('Marcas'),
                                   value: brandId,
                                   items: controller.brand.map((marca) {
                                     return DropdownMenuItem<int>(
@@ -122,6 +125,8 @@ class _CarsPageState extends State<CarsPage> {
                                       brandId: brandId.toString(),
                                     );
                                   },
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
                                 ),
                               ],
                             ),
