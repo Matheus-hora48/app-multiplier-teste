@@ -301,7 +301,7 @@ class _CarsPageState extends State<CarsPage> {
                                       ],
                                     );
                                   },
-                                )
+                                ),
                               ],
                             ),
                           );

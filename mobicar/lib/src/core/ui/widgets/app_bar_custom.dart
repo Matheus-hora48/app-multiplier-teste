@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AppBarCustom extends StatelessWidget {
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+  const AppBarCustom({ super.key });
 
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+   @override
+   Widget build(BuildContext context) {
+       return AppBar(
         title: Text(
           'Mobcar',
           style: TextStyle(
@@ -49,13 +44,6 @@ class _HomePageState extends State<HomePage> {
           'assets/images/blackBackground.jpg',
           fit: BoxFit.cover,
         ),
-      ),
-      body: Image.asset(
-        'assets/images/blackBackground.jpg',
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-      ),
-    );
+      );
   }
 }
