@@ -4,7 +4,7 @@ import '../../core/exceptions/repository_exceptions.dart';
 import '../../core/rest_client/http_manager.dart';
 import '../../models/valor.dart';
 import 'cars_repository.dart';
-import '../../models/anos.dart';
+import '../../models/model_anos.dart';
 import '../../models/marcas.dart';
 import '../../models/modelos.dart';
 

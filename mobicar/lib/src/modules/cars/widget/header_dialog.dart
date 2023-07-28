@@ -10,12 +10,14 @@ class HeaderDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Icon(Icons.car_repair),
-        Text(title),
-        const Spacer(),
-      ],
+    return Expanded(
+      child: Column(
+        children: [
+          const Icon(Icons.car_repair),
+          Text(title),
+          const Spacer(),
+        ],
+      ),
     );
   }
 }
