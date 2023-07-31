@@ -225,7 +225,7 @@ mixin _$CarsController on CarsControllerBase, Store {
 
   @override
   Future<void> showValue(
-      {required dynamic brandId,
+      {required String brandId,
       required String modelId,
       required String yearId}) {
     return _$showValueAsyncAction.run(() =>
@@ -241,17 +241,6 @@ mixin _$CarsController on CarsControllerBase, Store {
         name: 'CarsControllerBase.cleanDropdown');
     try {
       return super.cleanDropdown();
-    } finally {
-      _$CarsControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Marcas getBrandById(int brandId) {
-    final _$actionInfo = _$CarsControllerBaseActionController.startAction(
-        name: 'CarsControllerBase.getBrandById');
-    try {
-      return super.getBrandById(brandId);
     } finally {
       _$CarsControllerBaseActionController.endAction(_$actionInfo);
     }

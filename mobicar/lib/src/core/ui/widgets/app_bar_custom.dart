@@ -1,49 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class AppBarCustom extends StatelessWidget {
-
-  const AppBarCustom({ super.key });
-
-   @override
-   Widget build(BuildContext context) {
-       return AppBar(
-        title: Text(
-          'Mobcar',
-          style: TextStyle(
+class AppBarComponent {
+  static AppBar buildAppBar(BuildContext context, int initialValue) {
+    return AppBar(
+      title: Text(
+        'MOBCAR',
+        style: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+      actions: [
+        PopupMenuButton(
+          initialValue: initialValue,
+          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            PopupMenuItem(
+              value: 1,
+              child: const Text('Cars Page'),
+              onTap: () => Modular.to.navigate('/'),
+            ),
+            PopupMenuItem(
+              value: 2,
+              child: const Text('Menu 2'),
+              onTap: () => Modular.to.navigate('/cars'),
+            ),
+            const PopupMenuItem(
+              value: 3,
+              child: Text('Menu 3'),
+            ),
+          ],
+          icon: Icon(
+            Icons.menu_rounded,
             color: Theme.of(context).primaryColor,
           ),
         ),
-        actions: [
-          PopupMenuButton(
-            initialValue: 1,
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: 1,
-                child: Text('Home Page'),
-              ),
-              PopupMenuItem(
-                value: 2,
-                child: const Text('Menu 2'),
-                onTap: () => Modular.to.navigate('/cars'),
-              ),
-              const PopupMenuItem(
-                value: 3,
-                child: Text('Menu 3'),
-              ),
-            ],
-            icon: Icon(
-              Icons.menu_rounded,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-        ],
-        elevation: 0,
-        backgroundColor: Colors.black,
-        flexibleSpace: Image.asset(
-          'assets/images/blackBackground.jpg',
-          fit: BoxFit.cover,
-        ),
-      );
+      ],
+      elevation: 0,
+      backgroundColor: Colors.black,
+    );
   }
 }

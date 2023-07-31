@@ -115,7 +115,7 @@ class CarsRepositoryImpl implements CarsRepository {
   Future<bool> deleteCars(String id) async {
     final db = await DatabaseCars().db;
 
-    final result = db.delete(_tableName, where: 'id=?', whereArgs: [id]);
+    final result = await db.delete(_tableName, where: 'id=?', whereArgs: [id]);
     return result == 1 ? true : false;
   }
 
@@ -129,10 +129,9 @@ class CarsRepositoryImpl implements CarsRepository {
       modelo: car.modelo,
       ano: car.ano,
       valor: car.valor,
-      combustivel: car.combustivel,
     );
 
-    final id = db.update(
+    final id = await db.update(
       _tableName,
       dtoInnerBank.toMapInternalDatabase(objCar),
     );
@@ -151,7 +150,6 @@ class CarsRepositoryImpl implements CarsRepository {
       modelo: car.modelo,
       ano: car.ano,
       valor: dtoInnerBank.parseMoney(car.valor).toString(),
-      combustivel: car.combustivel,
     );
 
     final id = await db.insert(

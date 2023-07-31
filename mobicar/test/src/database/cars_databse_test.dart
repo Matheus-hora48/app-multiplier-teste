@@ -11,12 +11,12 @@ void main() {
   });
 
   tearDownAll(() async {
-    final database = await DatabaseConference().db;
+    final database = await DatabaseCars().db;
     deleteDatabase(database.path);
   });
 
   test('Create database cars', () async {
-    final database = await DatabaseConference().db;
+    final database = await DatabaseCars().db;
     expect(database.isOpen, true);
   });
 }

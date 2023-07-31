@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mobicar/src/dto/dto_inner_bank.dart';
 import 'package:mobicar/src/repositories/cars/cars_repository_impl.dart';
 
 void main() {
-  final repository = CarsRepositoryImpl();
+  final dtoInnerBank = DtoInnerBank();
+  final repository = CarsRepositoryImpl(dtoInnerBank);
 
   test('Test findBrand', () async {
     final brands = await repository.findBrand();

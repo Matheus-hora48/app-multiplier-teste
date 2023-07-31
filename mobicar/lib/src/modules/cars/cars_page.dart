@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobicar/src/modules/cars/cars_controller.dart';
 
+import '../../core/ui/widgets/app_bar_custom.dart';
 import '../../core/ui/widgets/footer.dart';
 import 'widget/car_list.dart';
 import 'widget/dialog_add_car.dart';
@@ -29,40 +30,7 @@ class _CarsPageState extends State<CarsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'MOBCAR',
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            initialValue: 2,
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: 1,
-                child: Text('Cars Page'),
-              ),
-              PopupMenuItem(
-                value: 2,
-                child: const Text('Menu 2'),
-                onTap: () => Modular.to.navigate('/cars'),
-              ),
-              const PopupMenuItem(
-                value: 3,
-                child: Text('Menu 3'),
-              ),
-            ],
-            icon: Icon(
-              Icons.menu_rounded,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-        ],
-        elevation: 0,
-        backgroundColor: Colors.black,
-      ),
+      appBar: AppBarComponent.buildAppBar(context, 2),
       body: Observer(
         builder: (_) {
           return controller.isLoading

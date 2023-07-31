@@ -56,16 +56,6 @@ abstract class CarsControllerBase with Store {
     _model.clear();
     _year.clear();
     _value = null;
-    valueInput = '';
-  }
-
-  @action
-  Marcas getBrandById(int brandId) {
-    var brand = _brand.firstWhere((marca) => marca.codigo == brandId);
-    if (brand == null) {
-      throw Exception('Marcas com o brandId $brandId não encontrado.');
-    }
-    return brand;
   }
 
   @action
@@ -92,13 +82,12 @@ abstract class CarsControllerBase with Store {
 
   @action
   Future<void> showValue({
-    required brandId,
+    required String brandId,
     required String modelId,
     required String yearId,
   }) async {
     isLoading = true;
     _value = await _carsRepository.findValue(brandId, modelId, yearId);
-    valueInput = _value!.valor;
     isLoading = false;
   }
 

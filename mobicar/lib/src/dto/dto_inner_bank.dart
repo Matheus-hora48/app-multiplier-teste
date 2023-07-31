@@ -16,7 +16,6 @@ class DtoInnerBank implements DtoInterface {
       modelo: Modelos.fromJson(jsonDecode(map['modelo'])),
       ano: Anos.fromJson(jsonDecode(map['ano'])),
       valor: map['valor'],
-      combustivel: map['combustivel'],
     );
   }
 
@@ -28,7 +27,6 @@ class DtoInnerBank implements DtoInterface {
       'modelo': jsonEncode(carro.modelo.toJson()),
       'ano': jsonEncode(carro.ano.toJson()),
       'valor': carro.valor,
-      'combustivel': carro.combustivel,
     };
   }
 

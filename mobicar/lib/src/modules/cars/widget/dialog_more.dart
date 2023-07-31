@@ -7,9 +7,14 @@ class DialogMore extends StatelessWidget {
   final Carro car;
   const DialogMore({super.key, required this.car});
 
-  String formatMoney(num value) {
+  String formatMoney(String value) {
     final formatter = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-    return formatter.format(value);
+
+    // Remova o símbolo 'R$' antes de fazer o parse
+    String cleanValue = value.replaceAll('R\$', '').trim();
+    num numericValue = double.parse(cleanValue);
+
+    return formatter.format(numericValue);
   }
 
   @override
@@ -81,7 +86,7 @@ class DialogMore extends StatelessWidget {
                       'Valor',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(formatMoney(double.parse(car.valor))),
+                    subtitle: Text(car.valor),
                   ),
                 ),
               ],

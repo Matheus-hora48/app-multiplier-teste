@@ -39,26 +39,23 @@ class CarList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              car.modelo.nome,
+              '${car.marca.nome} ${car.modelo.nome}',
               overflow: TextOverflow.clip,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
             const SizedBox(
               height: 4,
             ),
             Text(
-              '${car.ano.nome} ${car.combustivel}',
+              car.ano.nome,
               style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Colors.grey,
               ),
-            ),
-            const SizedBox(
-              height: 4,
             ),
             TextButton(
               onPressed: () {
