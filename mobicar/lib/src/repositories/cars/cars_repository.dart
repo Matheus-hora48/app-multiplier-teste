@@ -1,3 +1,4 @@
+import '../../dto/carro.dart';
 import '../../models/model_anos.dart';
 import '../../models/marcas.dart';
 import '../../models/modelos.dart';
@@ -15,4 +16,8 @@ abstract class CarsRepository {
     String modelId,
     String yearId,
   );
+  Future<List<Carro>> selectCars();
+  Future<int?> insertCars(Carro car);
+  Future<bool> deleteCars(String id);
+  Future<Carro?> editCars(Carro car);
 }

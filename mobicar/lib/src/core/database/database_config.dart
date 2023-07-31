@@ -1,11 +1,11 @@
 import 'package:mobicar/src/core/database/cars_migrations.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseConference {
-  static final DatabaseConference _dbController = DatabaseConference.internal();
+class DatabaseCars {
+  static final DatabaseCars _dbController = DatabaseCars.internal();
   static Database? _db;
 
-  factory DatabaseConference() => _dbController;
+  factory DatabaseCars() => _dbController;
 
   Future<Database> get db async {
     if (_db != null) return _db!;
@@ -13,7 +13,7 @@ class DatabaseConference {
     return _db = await initBd();
   }
 
-  DatabaseConference.internal();
+  DatabaseCars.internal();
 
 
 

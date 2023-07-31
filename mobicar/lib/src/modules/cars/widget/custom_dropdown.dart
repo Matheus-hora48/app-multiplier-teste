@@ -6,13 +6,12 @@ class CustomDropdown extends StatefulWidget {
   final List<DropdownMenuItem<int>> items;
   final Function(int?) onChanged;
 
-  const CustomDropdown({
-    super.key,
-    required this.hintText,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
+  const CustomDropdown(
+      {super.key,
+      required this.hintText,
+      required this.value,
+      required this.items,
+      required this.onChanged});
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();

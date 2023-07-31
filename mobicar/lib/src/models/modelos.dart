@@ -27,4 +27,7 @@ class Modelos {
 
   factory Modelos.fromJson(String source) =>
       Modelos.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'Modelos(codigo: $codigo, nome: $nome)';
 }

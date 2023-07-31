@@ -24,7 +24,7 @@ class AppBarCustom extends StatelessWidget {
               ),
               PopupMenuItem(
                 value: 2,
-                child: Text('Menu 2'),
+                child: const Text('Menu 2'),
                 onTap: () => Modular.to.navigate('/cars'),
               ),
               const PopupMenuItem(

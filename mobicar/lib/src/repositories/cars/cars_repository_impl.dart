@@ -1,7 +1,11 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
+import 'package:mobicar/src/dto/carro.dart';
+import 'package:mobicar/src/dto/dto_interface.dart';
+
+import '../../core/database/database_config.dart';
 import '../../core/exceptions/repository_exceptions.dart';
-import '../../core/rest_client/http_manager.dart';
 import '../../models/valor.dart';
 import 'cars_repository.dart';
 import '../../models/model_anos.dart';
@@ -9,18 +13,25 @@ import '../../models/marcas.dart';
 import '../../models/modelos.dart';
 
 class CarsRepositoryImpl implements CarsRepository {
-  final HttpManager _httpManager = HttpManager();
+  final DtoInterface dtoInnerBank;
+
   final String baseUrl = 'https://parallelum.com.br/fipe/api/v1';
+  static const _tableName = 'cars';
+
+  CarsRepositoryImpl(this.dtoInnerBank);
+
+  Dio dio = Dio();
 
   @override
   Future<List<Marcas>> findBrand() async {
     try {
-      final brandResponse = await _httpManager.restRequest(
-        url: "$baseUrl/carros/marcas",
-        method: HttpMethods.get,
+      final brandResponse = await dio.get(
+        "$baseUrl/carros/marcas",
       );
-      if (brandResponse is List) {
-        return brandResponse.map<Marcas>((o) => Marcas.fromMap(o)).toList();
+      if (brandResponse.data is List) {
+        return brandResponse.data
+            .map<Marcas>((o) => Marcas.fromMap(o))
+            .toList();
       }
       return [];
     } catch (e, s) {
@@ -38,13 +49,12 @@ class CarsRepositoryImpl implements CarsRepository {
   @override
   Future<List<Modelos>> findModel(String brandId) async {
     try {
-      final modelResponse = await _httpManager.restRequest(
-        url: "$baseUrl/carros/marcas/$brandId/modelos",
-        method: HttpMethods.get,
+      final modelResponse = await dio.get(
+        "$baseUrl/carros/marcas/$brandId/modelos",
       );
 
-      if (modelResponse['modelos'] is List) {
-        return modelResponse['modelos']
+      if (modelResponse.data['modelos'] is List) {
+        return modelResponse.data['modelos']
             .map<Modelos>((o) => Modelos.fromMap(o))
             .toList();
       }
@@ -64,11 +74,12 @@ class CarsRepositoryImpl implements CarsRepository {
   @override
   Future<List<Anos>> findYear(String brandId, String modelId) async {
     try {
-      final yearResponse = await _httpManager.restRequest(
-        url: "$baseUrl/carros/marcas/$brandId/modelos/$modelId/anos",
-        method: HttpMethods.get,
+      final yearResponse = await dio.get(
+        "$baseUrl/carros/marcas/$brandId/modelos/$modelId/anos",
       );
-      return (yearResponse as List).map<Anos>((o) => Anos.fromMap(o)).toList();
+      return (yearResponse.data as List)
+          .map<Anos>((o) => Anos.fromMap(o))
+          .toList();
     } catch (e, s) {
       log(
         'Erro ao buscar as datas',
@@ -84,12 +95,10 @@ class CarsRepositoryImpl implements CarsRepository {
   @override
   Future<Valor> findValue(String brandId, String modelId, String yearId) async {
     try {
-      final valueResponse = await _httpManager.restRequest(
-        url: "$baseUrl/marcas/$brandId/modelos/$modelId/anos/$yearId",
-        method: HttpMethods.get,
+      final valueResponse = await dio.get(
+        "$baseUrl/carros/marcas/$brandId/modelos/$modelId/anos/$yearId",
       );
-      return Valor.fromMap(
-          valueResponse); // Supondo que Valor possui um construtor fromMap que recebe um Map<String, dynamic>.
+      return Valor.fromMap(valueResponse.data);
     } catch (e, s) {
       log(
         'Erro ao buscar os valores',
@@ -100,5 +109,64 @@ class CarsRepositoryImpl implements CarsRepository {
         message: 'Erro ao buscar os valores',
       );
     }
+  }
+
+  @override
+  Future<bool> deleteCars(String id) async {
+    final db = await DatabaseCars().db;
+
+    final result = db.delete(_tableName, where: 'id=?', whereArgs: [id]);
+    return result == 1 ? true : false;
+  }
+
+  @override
+  Future<Carro?> editCars(Carro car) async {
+    final db = await DatabaseCars().db;
+
+    Carro objCar = Carro(
+      id: car.id,
+      marca: car.marca,
+      modelo: car.modelo,
+      ano: car.ano,
+      valor: car.valor,
+      combustivel: car.combustivel,
+    );
+
+    final id = db.update(
+      _tableName,
+      dtoInnerBank.toMapInternalDatabase(objCar),
+    );
+
+    if (id == 0) return null;
+    return objCar;
+  }
+
+  @override
+  Future<int?> insertCars(Carro car) async {
+    final db = await DatabaseCars().db;
+
+    Carro objCar = Carro(
+      id: car.id,
+      marca: car.marca,
+      modelo: car.modelo,
+      ano: car.ano,
+      valor: dtoInnerBank.parseMoney(car.valor).toString(),
+      combustivel: car.combustivel,
+    );
+
+    final id = await db.insert(
+      _tableName,
+      dtoInnerBank.toMapInternalDatabase(objCar),
+    );
+
+    if (id == 0) return null;
+    return id;
+  }
+
+  @override
+  Future<List<Carro>> selectCars() async {
+    final db = await DatabaseCars().db;
+    final result = await db.query(_tableName);
+    return result.map((map) => dtoInnerBank.fromInternalDatabase(map)).toList();
   }
 }

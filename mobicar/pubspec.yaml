@@ -43,6 +43,7 @@ dependencies:
   json_serializable: ^6.7.1
   sqflite: ^2.3.0
   sqflite_common_ffi: ^2.3.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

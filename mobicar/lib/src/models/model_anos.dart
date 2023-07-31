@@ -32,4 +32,7 @@ class Anos {
 
   factory Anos.fromJson(String source) =>
       Anos.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'Anos(codigo: $codigo, nome: $nome, anoSemHifen: $anoSemHifen)';
 }

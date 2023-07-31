@@ -27,4 +27,7 @@ class Marcas {
 
   factory Marcas.fromJson(String source) =>
       Marcas.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'Marcas(codigo: $codigo, nome: $nome)';
 }

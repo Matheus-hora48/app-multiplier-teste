@@ -1,29 +1,22 @@
+import 'dart:developer';
+
 import 'package:mobicar/src/models/model_anos.dart';
 import 'package:mobicar/src/models/marcas.dart';
 import 'package:mobicar/src/models/modelos.dart';
 import 'package:mobicar/src/repositories/cars/cars_repository.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../dto/carro.dart';
 import '../../models/valor.dart';
 
 part 'cars_controller.g.dart';
 
 class CarsController = CarsControllerBase with _$CarsController;
 
-enum CarsStateStatus {
-  initial,
-  loading,
-  loaded,
-  error,
-}
-
 abstract class CarsControllerBase with Store {
   final CarsRepository _carsRepository;
 
   CarsControllerBase(this._carsRepository);
-
-  @observable
-  CarsStateStatus _status = CarsStateStatus.initial;
 
   @readonly
   List<Marcas> _brand = [];
@@ -35,28 +28,66 @@ abstract class CarsControllerBase with Store {
   List<Anos> _year = [];
 
   @readonly
+  List<Carro> _cars = [];
+
+  @observable
+  String errorMensage = '';
+
+  @observable
+  int selectedBrandId = 1;
+
+  @observable
+  int selectedModelId = 0;
+
+  @observable
+  int selectedYearId = 0;
+
+  @readonly
   Valor? _value;
+
+  @observable
+  String valueInput = '';
+
+  @observable
+  bool isLoading = false;
+
+  @action
+  cleanDropdown() {
+    _model.clear();
+    _year.clear();
+    _value = null;
+    valueInput = '';
+  }
+
+  @action
+  Marcas getBrandById(int brandId) {
+    var brand = _brand.firstWhere((marca) => marca.codigo == brandId);
+    if (brand == null) {
+      throw Exception('Marcas com o brandId $brandId não encontrado.');
+    }
+    return brand;
+  }
 
   @action
   Future<void> showBrand() async {
-    _status = CarsStateStatus.loading;
+    isLoading = true;
     _brand = await _carsRepository.findBrand();
-    _status = CarsStateStatus.loaded;
+    isLoading = false;
   }
 
   @action
   Future<void> showModel({required String brandId}) async {
-    _status = CarsStateStatus.loading;
+    isLoading = true;
     _model = await _carsRepository.findModel(brandId);
-    _status = CarsStateStatus.loaded;
+    isLoading = false;
   }
 
   @action
   Future<void> showYear(
       {required String brandId, required String modelId}) async {
-    _status = CarsStateStatus.loading;
+    isLoading = true;
     _year = await _carsRepository.findYear(brandId, modelId);
-    _status = CarsStateStatus.loaded;
+    isLoading = false;
   }
 
   @action
@@ -65,8 +96,57 @@ abstract class CarsControllerBase with Store {
     required String modelId,
     required String yearId,
   }) async {
-    _status = CarsStateStatus.loading;
+    isLoading = true;
     _value = await _carsRepository.findValue(brandId, modelId, yearId);
-    _status = CarsStateStatus.loaded;
+    valueInput = _value!.valor;
+    isLoading = false;
+  }
+
+  Future<void> selectCars() async {
+    try {
+      isLoading = true;
+      _cars = await _carsRepository.selectCars();
+      isLoading = false;
+    } catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      errorMensage = 'Erro ao buscar os carro';
+      isLoading = false;
+    }
+  }
+
+  Future<void> insertCars(Carro car) async {
+    try {
+      isLoading = true;
+      await _carsRepository.insertCars(car);
+      isLoading = false;
+    } catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      errorMensage = 'Erro ao inserir o carro';
+      isLoading = false;
+    }
+  }
+
+  Future<void> deleteCars(String id) async {
+    try {
+      isLoading = true;
+      await _carsRepository.deleteCars(id);
+      isLoading = false;
+    } catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      errorMensage = 'Erro ao deletar o carro';
+      isLoading = false;
+    }
+  }
+
+  Future<void> editCars(Carro car) async {
+    try {
+      isLoading = true;
+      await _carsRepository.editCars(car);
+      isLoading = false;
+    } catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      errorMensage = 'Erro ao editar o carro';
+      isLoading = false;
+    }
   }
 }

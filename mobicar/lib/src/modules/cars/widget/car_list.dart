@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+import 'package:mobicar/src/modules/cars/cars_controller.dart';
+
+import '../../../dto/carro.dart';
+import 'dialog_add_car.dart';
+import 'dialog_more.dart';
+
 class CarList extends StatelessWidget {
-  final String name;
-  final String year;
-  final String fuel;
+  final CarsController controller;
+  final Carro car;
 
   const CarList({
-    super.key,
-    required this.name,
-    required this.year,
-    required this.fuel,
-  });
+    Key? key,
+    required this.controller,
+    required this.car,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +39,9 @@ class CarList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              name,
-              style: TextStyle(
+              car.modelo.nome,
+              overflow: TextOverflow.clip,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -45,8 +50,8 @@ class CarList extends StatelessWidget {
               height: 4,
             ),
             Text(
-              '$year $fuel',
-              style: TextStyle(
+              '${car.ano.nome} ${car.combustivel}',
+              style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Colors.grey,
@@ -55,25 +60,54 @@ class CarList extends StatelessWidget {
             const SizedBox(
               height: 4,
             ),
-            Text(
-              'Ver Mais',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).primaryColor,
+            TextButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return DialogMore(
+                      car: car,
+                    );
+                  },
+                );
+              },
+              child: Text(
+                'Ver Mais',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
-            ),
+            )
           ],
         ),
         const Spacer(),
         PopupMenuButton(
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 1,
-              child: Text('Apagar'),
+              child: const Text('Apagar'),
+              onTap: () {
+                controller.deleteCars(car.id.toString());
+                controller.selectCars();
+              },
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 2,
-              child: Text('Editar'),
+              child: const Text('Editar'),
+              onTap: () {
+                Future.delayed(Duration.zero, () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogAddCar(
+                        car: car,
+                        controller: controller,
+                      );
+                    },
+                  );
+                });
+              },
             ),
           ],
           icon: Icon(

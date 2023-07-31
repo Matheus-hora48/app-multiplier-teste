@@ -40,14 +40,14 @@ class Valor {
   factory Valor.fromMap(Map<String, dynamic> map) {
     return Valor(
       tipoVeiculo: map['TipoVeiculo'] as int,
-      valor: map['valor'] as String,
-      marca: map['marca'] as String,
-      modelo: map['modelo'] as String,
-      anoModelo: map['anoModelo'] as int,
-      combustivel: map['combustivel'] as String,
-      codigoFipe: map['codigoFipe'] as String,
-      mesReferencia: map['mesReferencia'] as String,
-      siglaCombustivel: map['siglaCombustivel'] as String,
+      valor: map['Valor'] as String,
+      marca: map['Marca'] as String,
+      modelo: map['Modelo'] as String,
+      anoModelo: map['AnoModelo'] as int,
+      combustivel: map['Combustivel'] as String,
+      codigoFipe: map['CodigoFipe'] as String,
+      mesReferencia: map['MesReferencia'] as String,
+      siglaCombustivel: map['SiglaCombustivel'] as String,
     );
   }
 
@@ -55,4 +55,9 @@ class Valor {
 
   factory Valor.fromJson(String source) =>
       Valor.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'Valor(tipoVeiculo: $tipoVeiculo, valor: $valor, marca: $marca, modelo: $modelo, anoModelo: $anoModelo, combustivel: $combustivel, codigoFipe: $codigoFipe, mesReferencia: $mesReferencia, siglaCombustivel: $siglaCombustivel)';
+  }
 }
