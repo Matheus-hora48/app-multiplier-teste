@@ -23,9 +23,9 @@ class _HomePageState extends State<HomePage> {
             width: double.infinity,
             height: double.infinity,
           ),
-          Align(
+          const Align(
             alignment: Alignment.bottomCenter,
-            child: const Footer(),
+            child: Footer(),
           )
         ],
       ),
