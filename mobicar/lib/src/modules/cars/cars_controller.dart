@@ -46,9 +46,6 @@ abstract class CarsControllerBase with Store {
   Valor? _value;
 
   @observable
-  String valueInput = '';
-
-  @observable
   bool isLoading = false;
 
   @action

@@ -163,22 +163,6 @@ mixin _$CarsController on CarsControllerBase, Store {
     });
   }
 
-  late final _$valueInputAtom =
-      Atom(name: 'CarsControllerBase.valueInput', context: context);
-
-  @override
-  String get valueInput {
-    _$valueInputAtom.reportRead();
-    return super.valueInput;
-  }
-
-  @override
-  set valueInput(String value) {
-    _$valueInputAtom.reportWrite(value, super.valueInput, () {
-      super.valueInput = value;
-    });
-  }
-
   late final _$isLoadingAtom =
       Atom(name: 'CarsControllerBase.isLoading', context: context);
 
@@ -253,7 +237,6 @@ errorMensage: ${errorMensage},
 selectedBrandId: ${selectedBrandId},
 selectedModelId: ${selectedModelId},
 selectedYearId: ${selectedYearId},
-valueInput: ${valueInput},
 isLoading: ${isLoading}
     ''';
   }
