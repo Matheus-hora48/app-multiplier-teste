@@ -134,6 +134,8 @@ class CarsRepositoryImpl implements CarsRepository {
     final id = await db.update(
       _tableName,
       dtoInnerBank.toMapInternalDatabase(objCar),
+      where: 'id=?',
+      whereArgs: [objCar.id],
     );
 
     if (id == 0) return null;

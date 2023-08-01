@@ -16,7 +16,7 @@ class AppBarComponent {
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
             PopupMenuItem(
               value: 1,
-              child: const Text('Cars Page'),
+              child: const Text('Home Page'),
               onTap: () => Modular.to.navigate('/'),
             ),
             PopupMenuItem(

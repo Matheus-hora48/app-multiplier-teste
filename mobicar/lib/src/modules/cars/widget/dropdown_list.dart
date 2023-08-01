@@ -4,6 +4,8 @@ import 'package:mobicar/src/dto/carro.dart';
 import 'package:mobicar/src/modules/cars/widget/custom_dropdown.dart';
 
 import '../../../models/marcas.dart';
+import '../../../models/model_anos.dart';
+import '../../../models/modelos.dart';
 import '../cars_controller.dart';
 
 class DropdownList extends StatefulWidget {
@@ -68,13 +70,18 @@ class _DropdownListState extends State<DropdownList> {
     if (widget.car != null) {
       Marcas marca = widget.controller.brand
           .firstWhere((m) => int.tryParse(m.codigo) == brandId);
+      Modelos modelo = widget.controller.model
+          .firstWhere((m) => int.tryParse(m.codigo) == modelId);
+      Anos ano = widget.controller.year.firstWhere(
+          (m) => m.codigo.substring(0, 4) == yearId.toString().substring(0, 4));
+
       widget.controller
           .editCars(
         Carro(
           id: widget.car?.id,
           marca: marca,
-          modelo: widget.controller.model.first,
-          ano: widget.controller.year.first,
+          modelo: modelo,
+          ano: ano,
           valor: widget.controller.value!.valor,
         ),
       )
@@ -86,13 +93,17 @@ class _DropdownListState extends State<DropdownList> {
     } else {
       Marcas marca = widget.controller.brand
           .firstWhere((m) => int.tryParse(m.codigo) == brandId);
+      Modelos modelo = widget.controller.model
+          .firstWhere((m) => int.tryParse(m.codigo) == modelId);
+      Anos ano = widget.controller.year.firstWhere(
+          (m) => m.codigo.substring(0, 4) == yearId.toString().substring(0, 4));
 
       widget.controller
           .insertCars(
         Carro(
           marca: marca,
-          modelo: widget.controller.model.first,
-          ano: widget.controller.year.first,
+          modelo: modelo,
+          ano: ano,
           valor: widget.controller.value!.valor,
         ),
       )

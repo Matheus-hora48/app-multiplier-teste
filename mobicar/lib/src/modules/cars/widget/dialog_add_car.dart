@@ -15,7 +15,12 @@ class DialogAddCar extends StatelessWidget {
       title: Row(
         children: [
           const Icon(Icons.car_repair),
-          Text(car != null ? car!.modelo.nome : 'Cadastro de veículo'),
+          Expanded(
+            child: Text(
+              car != null ? car!.modelo.nome : 'Cadastrar',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
           const Spacer(),
           IconButton(
             onPressed: () {

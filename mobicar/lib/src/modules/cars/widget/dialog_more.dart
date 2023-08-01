@@ -10,7 +10,10 @@ class DialogMore extends StatelessWidget {
   String formatMoney(String value) {
     final formatter = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
-    // Remova o símbolo 'R$' antes de fazer o parse
+    if (value.startsWith('R\$')) {
+      return value;
+    }
+
     String cleanValue = value.replaceAll('R\$', '').trim();
     num numericValue = double.parse(cleanValue);
 
@@ -23,7 +26,12 @@ class DialogMore extends StatelessWidget {
       title: Row(
         children: [
           const Icon(Icons.car_repair),
-          Text(car.modelo.nome),
+          Expanded(
+            child: Text(
+              car.modelo.nome,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
           const Spacer(),
           IconButton(
             onPressed: () {
@@ -86,7 +94,7 @@ class DialogMore extends StatelessWidget {
                       'Valor',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(car.valor),
+                    subtitle: Text(formatMoney(car.valor)),
                   ),
                 ),
               ],

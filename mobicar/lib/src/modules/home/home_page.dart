@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/ui/widgets/app_bar_custom.dart';
+import '../../core/ui/widgets/footer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,11 +15,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarComponent.buildAppBar(context, 1),
-      body: Image.asset(
-        'assets/images/blackBackground.jpg',
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/images/blackBackground.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: const Footer(),
+          )
+        ],
       ),
     );
   }
