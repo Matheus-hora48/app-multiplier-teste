@@ -23,11 +23,11 @@ class DropdownList extends StatefulWidget {
 }
 
 class _DropdownListState extends State<DropdownList> {
-  late int brandId;
-  late int modelId;
-  late int yearId;
-  late String value;
-  late String id;
+  int brandId = 1;
+  int modelId = 0;
+  int yearId = 0;
+  String value = '';
+  String id = '';
 
   @override
   void initState() {
@@ -66,48 +66,66 @@ class _DropdownListState extends State<DropdownList> {
     }
   }
 
-  void saveOrEdit(BuildContext context) {
-    if (widget.car != null) {
-      Marcas marca = widget.controller.brand
-          .firstWhere((m) => int.tryParse(m.codigo) == brandId);
-      Modelos modelo = widget.controller.model
-          .firstWhere((m) => int.tryParse(m.codigo) == modelId);
-      Anos ano = widget.controller.year.firstWhere(
-          (m) => m.codigo.substring(0, 4) == yearId.toString().substring(0, 4));
+  void _onBrandChanged(int? newValue) async {
+    setState(() {
+      brandId = newValue!;
+    });
+    await widget.controller.showModel(brandId: brandId.toString());
+    setState(() {
+      modelId = int.parse(widget.controller.model.first.codigo);
+    });
+  }
 
-      widget.controller
-          .editCars(
-        Carro(
-          id: widget.car?.id,
-          marca: marca,
-          modelo: modelo,
-          ano: ano,
-          valor: widget.controller.value!.valor,
-        ),
-      )
-          .then((_) {
+  void _onModelChanged(int? newValue) async {
+    setState(() {
+      modelId = newValue!;
+    });
+    await widget.controller.showYear(
+      brandId: brandId.toString(),
+      modelId: modelId.toString(),
+    );
+    setState(() {
+      yearId = int.parse(widget.controller.year.first.anoSemHifen);
+    });
+  }
+
+  void _onYearChanged(int? newValue) {
+    yearId = newValue!;
+    id = widget.controller.year
+        .firstWhere((m) => int.tryParse(m.anoSemHifen) == yearId)
+        .codigo;
+    widget.controller.showValue(
+      brandId: brandId.toString(),
+      modelId: modelId.toString(),
+      yearId: id,
+    );
+    setState(() {});
+  }
+
+  void _saveEditCar(BuildContext context) {
+    Marcas marca = widget.controller.brand
+        .firstWhere((m) => int.tryParse(m.codigo) == brandId);
+    Modelos modelo = widget.controller.model
+        .firstWhere((m) => int.tryParse(m.codigo) == modelId);
+    Anos ano = widget.controller.year.firstWhere(
+        (m) => m.codigo.substring(0, 4) == yearId.toString().substring(0, 4));
+
+    Carro car = Carro(
+      id: widget.car?.id,
+      marca: marca,
+      modelo: modelo,
+      ano: ano,
+      valor: widget.controller.value!.valor,
+    );
+
+    if (widget.car != null) {
+      widget.controller.editCars(car).then((_) {
         resetDropdownValues();
         widget.controller.selectCars();
         Navigator.of(context).pop();
       });
     } else {
-      Marcas marca = widget.controller.brand
-          .firstWhere((m) => int.tryParse(m.codigo) == brandId);
-      Modelos modelo = widget.controller.model
-          .firstWhere((m) => int.tryParse(m.codigo) == modelId);
-      Anos ano = widget.controller.year.firstWhere(
-          (m) => m.codigo.substring(0, 4) == yearId.toString().substring(0, 4));
-
-      widget.controller
-          .insertCars(
-        Carro(
-          marca: marca,
-          modelo: modelo,
-          ano: ano,
-          valor: widget.controller.value!.valor,
-        ),
-      )
-          .then((_) {
+      widget.controller.insertCars(car).then((_) {
         widget.controller.selectCars();
         Navigator.of(context).pop();
       });
@@ -132,17 +150,7 @@ class _DropdownListState extends State<DropdownList> {
                           child: Text(marca.nome),
                         );
                       }).toList(),
-                      onChanged: (int? newValue) async {
-                        setState(() {
-                          brandId = newValue!;
-                        });
-                        await widget.controller
-                            .showModel(brandId: brandId.toString());
-                        setState(() {
-                          modelId =
-                              int.parse(widget.controller.model.first.codigo);
-                        });
-                      },
+                      onChanged: _onBrandChanged,
                     ),
                     const SizedBox(height: 8),
                     CustomDropdown(
@@ -154,23 +162,9 @@ class _DropdownListState extends State<DropdownList> {
                           child: Text(marca.nome),
                         );
                       }).toList(),
-                      onChanged: (int? newValue) async {
-                        setState(() {
-                          modelId = newValue!;
-                        });
-                        await widget.controller.showYear(
-                          brandId: brandId.toString(),
-                          modelId: modelId.toString(),
-                        );
-                        setState(() {
-                          yearId = int.parse(
-                              widget.controller.year.first.anoSemHifen);
-                        });
-                      },
+                      onChanged: _onModelChanged,
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    const SizedBox(height: 8),
                     CustomDropdown(
                       hintText: 'Anos',
                       value: yearId,
@@ -181,15 +175,7 @@ class _DropdownListState extends State<DropdownList> {
                           child: Text(marca.nome),
                         );
                       }).toList(),
-                      onChanged: (int? newValue) {
-                        yearId = newValue!;
-                        widget.controller.showValue(
-                          brandId: brandId.toString(),
-                          modelId: modelId.toString(),
-                          yearId: id,
-                        );
-                        setState(() {});
-                      },
+                      onChanged: _onYearChanged,
                     ),
                     const SizedBox(height: 8),
                     Container(
@@ -231,7 +217,7 @@ class _DropdownListState extends State<DropdownList> {
                         const SizedBox(width: 4),
                         ElevatedButton(
                           onPressed: () {
-                            saveOrEdit(context);
+                            _saveEditCar(context);
                           },
                           style: ButtonStyle(
                             elevation: MaterialStateProperty.all(0),
